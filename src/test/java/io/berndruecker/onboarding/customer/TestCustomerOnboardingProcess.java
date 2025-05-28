@@ -6,6 +6,8 @@ import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.process.test.api.ZeebeTestEngine;
 import io.camunda.zeebe.process.test.inspections.model.InspectedProcessInstance;
 import io.camunda.zeebe.spring.test.ZeebeSpringTest;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import org.testcontainers.containers.GenericContainer;
-
+import org.testcontainers.containers.PostgreSQLContainer;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +52,12 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 public class TestCustomerOnboardingProcess {
 
     private static GenericContainer rabbitmqContainer = new GenericContainer("rabbitmq").withExposedPorts(5672);
+
+    private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:11")
+      .withDatabaseName("prop")
+      .withUsername("postgres")
+      .withPassword("pass")
+      .withExposedPorts(5432);
 
     @Autowired
     private CustomerOnboardingRestController customerOnboardingRestController;
@@ -77,6 +87,22 @@ public class TestCustomerOnboardingProcess {
         mockRestServer = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();
     }
 
+     @BeforeAll
+  static void beforeAll() {
+    postgres.start();
+  }
+
+  @AfterAll
+  static void afterAll() {
+    postgres.stop();
+  }
+
+  @DynamicPropertySource
+  static void configureProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.datasource.url", postgres::getJdbcUrl);
+    registry.add("spring.datasource.username", postgres::getUsername);
+    registry.add("spring.datasource.password", postgres::getPassword);
+  }
     @Test
     public void testAutomaticOnboarding() throws Exception {
         // Define expectations on the REST calls

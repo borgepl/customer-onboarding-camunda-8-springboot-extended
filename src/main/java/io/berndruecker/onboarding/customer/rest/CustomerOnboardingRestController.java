@@ -31,7 +31,8 @@ public class CustomerOnboardingRestController {
     if (customerRegionScore==null) {customerRegionScore = "40";}
 
     onboardCustomer(paymentType, Integer.parseInt(monthlyPayment), Integer.parseInt(customerRegionScore));
-
+    logger.info(customerRegionScore);
+    
     return ResponseEntity.status(HttpStatus.ACCEPTED).build();
   }
 

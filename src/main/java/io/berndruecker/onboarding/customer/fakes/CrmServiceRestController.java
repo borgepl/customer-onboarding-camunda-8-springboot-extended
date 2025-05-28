@@ -1,6 +1,5 @@
 package io.berndruecker.onboarding.customer.fakes;
 
-import io.berndruecker.onboarding.customer.rest.CustomerOnboardingRestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
