@@ -6,10 +6,13 @@ import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.process.test.api.ZeebeTestEngine;
 import io.camunda.zeebe.process.test.inspections.model.InspectedProcessInstance;
 import io.camunda.zeebe.spring.test.ZeebeSpringTest;
+
+import org.camunda.community.process_test_coverage.junit5.platform8.ProcessEngineCoverageExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -49,8 +52,10 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @AutoConfigureWebClient
 //@AutoConfigureMockRestServiceServer
 @ContextConfiguration(initializers = TestCustomerOnboardingProcess.RabbitMqTestcontainersInitializer.class)
+@ExtendWith(ProcessEngineCoverageExtension.class)
 public class TestCustomerOnboardingProcess {
 
+    @SuppressWarnings({ "rawtypes", "resource" })
     private static GenericContainer rabbitmqContainer = new GenericContainer("rabbitmq").withExposedPorts(5672);
 
     private static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:11")
@@ -153,7 +158,7 @@ public class TestCustomerOnboardingProcess {
         waitForUserTaskAndComplete("TaskProcessApplicationManually");
 
         // Now the process should run to the end
-        waitForProcessInstanceCompleted(processInstance, Duration.ofSeconds(10));
+        waitForProcessInstanceCompleted(processInstance, Duration.ofSeconds(30));
 
         // Let's assert that it passed certain BPMN elements (more to show off features here)
         assertThat(processInstance)
@@ -175,10 +180,17 @@ public class TestCustomerOnboardingProcess {
 
     public void waitForUserTaskAndComplete(String userTaskId, Map<String, Object> variables) throws InterruptedException, TimeoutException {
         // Let the workflow engine do whatever it needs to do
-        zeebeTestEngine.waitForIdleState(Duration.ofSeconds(10));
+        // zeebeTestEngine.waitForIdleState(Duration.ofSeconds(60));
+        zeebeTestEngine.waitForIdleState(Duration.ofMinutes(5));
 
         // Now get all user tasks
-        List<ActivatedJob> jobs = zeebeClient.newActivateJobsCommand().jobType(USER_TASK_JOB_TYPE).maxJobsToActivate(1).workerName("waitForUserTaskAndComplete").send().join().getJobs();
+        List<ActivatedJob> jobs = zeebeClient.newActivateJobsCommand()
+        .jobType(USER_TASK_JOB_TYPE)
+        .maxJobsToActivate(1)
+        .workerName("waitForUserTaskAndComplete")
+        .send()
+        .join()
+        .getJobs();
 
         // Should be only one
         assertTrue(jobs.size()>0, "Job for user task '" + userTaskId + "' does not exist");

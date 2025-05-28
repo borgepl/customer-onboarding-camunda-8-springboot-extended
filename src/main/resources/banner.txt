@@ -1,0 +1,21 @@
+                                                                                                                                                                                              
+EEEEEEEEEEEEEEEEEEEEEE                                                                         
+E::::::::::::::::::::E                                                                         
+E::::::::::::::::::::E                                                                         
+EE::::::EEEEEEEEE::::E                                                                         
+  E:::::E       EEEEEE  aaaaaaaaaaaaa      cccccccccccccccc    eeeeeeeeeeee    aaaaaaaaaaaaa   
+  E:::::E               a::::::::::::a   cc:::::::::::::::c  ee::::::::::::ee  a::::::::::::a  
+  E::::::EEEEEEEEEE     aaaaaaaaa:::::a c:::::::::::::::::c e::::::eeeee:::::eeaaaaaaaaa:::::a 
+  E:::::::::::::::E              a::::ac:::::::cccccc:::::ce::::::e     e:::::e         a::::a 
+  E:::::::::::::::E       aaaaaaa:::::ac::::::c     ccccccce:::::::eeeee::::::e  aaaaaaa:::::a 
+  E::::::EEEEEEEEEE     aa::::::::::::ac:::::c             e:::::::::::::::::e aa::::::::::::a 
+  E:::::E              a::::aaaa::::::ac:::::c             e::::::eeeeeeeeeee a::::aaaa::::::a 
+  E:::::E       EEEEEEa::::a    a:::::ac::::::c     ccccccce:::::::e         a::::a    a:::::a 
+EE::::::EEEEEEEE:::::Ea::::a    a:::::ac:::::::cccccc:::::ce::::::::e        a::::a    a:::::a 
+E::::::::::::::::::::Ea:::::aaaa::::::a c:::::::::::::::::c e::::::::eeeeeeeea:::::aaaa::::::a 
+E::::::::::::::::::::E a::::::::::aa:::a cc:::::::::::::::c  ee:::::::::::::e a::::::::::aa:::a
+EEEEEEEEEEEEEEEEEEEEEE  aaaaaaaaaa  aaaa   cccccccccccccccc    eeeeeeeeeeeeee  aaaaaaaaaa  aaaa
+                                                                                               
+===================================================================================================/_/_/_/
+
+:: Built with Spring Boot :: ${spring-boot.version}
